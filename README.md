@@ -9,7 +9,9 @@
 - The library accept an unlimited number of commands;
 - Each command may accept parameters received by the command line (example: `--value=100`);
 
-## Usage example
+Check out the projects [BrainFuckInterpreter](https://github.com/ClecioJung/BrainFuckInterpreter) and [JSonny](https://github.com/ClecioJung/JSonny) which are giving cool uses to this library!
+
+## Usage
 
 In order to use this library in your project, just donwload the files `arguments.h` and `arguments.c`, paste them on your project folder and include the header file in your source code:
 
@@ -91,4 +93,59 @@ int main(const int argc, const char *const argv[])
 }
 ```
 
-Check the file `test.c` for an complete example of usage. In order to run the test suite, just download this project and compile the example using the command `make` in its folder.
+## Test
+
+Check the file `test.c` for an complete example of usage. In order to run the test suite, just download this project and compile the example using the command `make` in its folder. Next, just run the executable `test_arguments`, using some commands, such as this examples:
+
+```
+./test_arguments -h
+[Usage] ./test_arguments [Options]
+[Options]:
+	--help     or -h  : Display this help message.
+	--version  or -v  : Display the software version.
+	--date            : Display the current date.
+	--time     or -t  : Display the current time.
+	--inc=     or -i= : Increment one to the value passed as argument.
+	--dec=     or -d  : Decrement one to the value passed as argument.
+	--first=   or -f  : Atributes the value passed as argument to the global variable 'first'.
+	--second=  or -s  : Atributes the value passed as argument to the global variable 'second'.
+	--sum             : Returns the sum of the global variables 'first' and 'second'.
+	--subtract        : Returns the subtraction of the global variables 'first' and 'second'.
+	--error    or -e  : Returns EXIT_FAILURE and ends the parsing of arguments.
+```
+```
+./test_arguments --version
+[Version] 1.0.0
+```
+```
+./test_arguments --date
+Current date: 2021-10-02
+```
+```
+./test_arguments --time
+Current time: 10:57:24
+```
+```
+./test_arguments --inc=10
+Incrementing one to 10 results in 11
+```
+```
+./test_arguments --dec=10
+Decrementing one to 10 results in 9
+```
+```
+./test_arguments --first=10 --second=3 --sum --subtract
+Atributing 10 to the variable 'first'
+Atributing 3 to the variable 'second'
+The sum of the global variables 'first' and 'second' is 13
+The subtraction of the global variables 'first' and 'second' is 7
+```
+```
+./test_arguments --first=10 --error --second=3 --sum --subtract
+Atributing 10 to the variable 'first'
+Detected an error and we're now ending the parsing of arguments.
+```
+```
+./test_arguments abc
+Unrecognized argument: abc
+```

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "arguments.h"
 
 /*
@@ -46,15 +47,19 @@ int printVersion(const char *const arg)
 
 int displayDate(const char *const arg)
 {
+    time_t t = time(NULL);
+    const struct tm tm = *localtime(&t);
     (void)arg;
-    printf("Current date: %s\n", version);
+    printf("Current date: %d-%02d-%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
     return EXIT_SUCCESS;
 }
 
 int displayTime(const char *const arg)
 {
+    time_t t = time(NULL);
+    const struct tm tm = *localtime(&t);
     (void)arg;
-    printf("Current time: %s\n", version);
+    printf("Current time: %02d:%02d:%02d\n", tm.tm_hour, tm.tm_min, tm.tm_sec);
     return EXIT_SUCCESS;
 }
 
@@ -77,7 +82,7 @@ int decrement(const char *const arg)
 int error(const char *const arg)
 {
     (void)arg;
-    printf("Error");
+    printf("Detected an error and we're now ending the parsing of arguments.\n");
     return EXIT_FAILURE;
 }
 
