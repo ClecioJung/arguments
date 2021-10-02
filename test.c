@@ -74,6 +74,13 @@ int decrement(const char *const arg)
     return EXIT_SUCCESS;
 }
 
+int error(const char *const arg)
+{
+    (void)arg;
+    printf("Error");
+    return EXIT_FAILURE;
+}
+
 int firstValue(const char *const arg)
 {
     const char *ptr = strchr(arg, '=');
@@ -124,6 +131,7 @@ int main(const int argc, const char *const argv[])
     addArgument("--second=", "-s", secondValue, "Atributes the value passed as argument to the global variable 'second'.");
     addArgument("--sum", NULL, sumValues, "Returns the sum of the global variables 'first' and 'second'.");
     addArgument("--subtract", NULL, subtractValues, "Returns the subtraction of the global variables 'first' and 'second'.");
+    addArgument("--error", "-e", error, "Returns EXIT_FAILURE and ends the parsing of arguments.");
     parseArguments(argc, argv);
     return EXIT_SUCCESS;
 }

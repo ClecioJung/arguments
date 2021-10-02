@@ -151,10 +151,7 @@ static int parseArgument(const char *const arg)
     /* no argument found, try default action */
     if (defaultFunction)
     {
-        if (!defaultFunction(arg))
-        {
-            return EXIT_SUCCESS;
-        }
+        return defaultFunction(arg);
     }
     sprintf(buf, "Unknown argument: %s", arg);
     argumentsUsage(buf);
