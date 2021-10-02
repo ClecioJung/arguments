@@ -78,11 +78,12 @@ int addArgument(const char *const cmd, const char *const alias, ArgFunction func
         return EXIT_FAILURE;
     }
     argList = newList;
+    const size_t aliasLength = alias ? strlen(alias) : 0;
     argList[argNum] = (struct ArgCmd){
         .cmd = cmd,
         .cmdLength = strlen(cmd),
         .alias = alias,
-        .aliasLength = strlen(alias),
+        .aliasLength = aliasLength,
         .parameter = FALSE,
         .function = function,
         .usage = usage,
@@ -92,10 +93,13 @@ int addArgument(const char *const cmd, const char *const alias, ArgFunction func
     {
         argList[argNum].parameter = TRUE;
         argList[argNum].cmdLength = param - cmd;
-        param = strchr(alias, '=');
-        if (param)
+        if (alias)
         {
-            argList[argNum].aliasLength = param - alias;
+            param = strchr(alias, '=');
+            if (param)
+            {
+                argList[argNum].aliasLength = param - alias;
+            }
         }
     }
     argNum++;
@@ -187,7 +191,15 @@ void showListOfArguments(void)
         printf("\t%-*s", cmdMaxLength, argList[argCmd].cmd);
         if (argList[argCmd].alias)
         {
-            printf(" or %-*s", aliasMaxLength, argList[argCmd].alias);
+            printf(" or %-*s ", aliasMaxLength, argList[argCmd].alias);
+        }
+        else
+        {
+            int whiteSpaces = aliasMaxLength + 6;
+            while (--whiteSpaces)
+            {
+                printf(" ");
+            }
         }
         if (argList[argCmd].usage)
         {
