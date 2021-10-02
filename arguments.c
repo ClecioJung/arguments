@@ -1,25 +1,30 @@
-//------------------------------------------------------------------------------
-// LIBRARIES
-//------------------------------------------------------------------------------
+/*
+ *------------------------------------------------------------------------------
+ * LIBRARIES
+ *------------------------------------------------------------------------------
+ */
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include "arguments.h"
 
-//------------------------------------------------------------------------------
-// DEFINITIONS
-//------------------------------------------------------------------------------
+/*
+ *------------------------------------------------------------------------------
+ * DEFINITIONS
+ *------------------------------------------------------------------------------
+ */
 
 #define TRUE ((int)1)
 #define FALSE ((int)0)
 
-//------------------------------------------------------------------------------
-// USER TYPES
-//------------------------------------------------------------------------------
+/*
+ *------------------------------------------------------------------------------
+ * USER TYPES
+ *------------------------------------------------------------------------------
+ */
 
-// Table used to concentrate all the information related to the comand line arguments
+/* Table used to concentrate all the information related to the comand line arguments */
 struct ArgCmd
 {
     const char *cmd;
@@ -31,22 +36,22 @@ struct ArgCmd
     const char *usage;
 };
 
-//------------------------------------------------------------------------------
-// FUNCTION PROTOTYPES
-//------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------
-// GLOBAL VARIABLES
-//------------------------------------------------------------------------------
+/*
+ *------------------------------------------------------------------------------
+ * GLOBAL VARIABLES
+ *------------------------------------------------------------------------------
+ */
 
 static struct ArgCmd *argList = NULL;
 static unsigned int argNum = 0;
 static ArgFunction usageFunction = NULL, defaultFunction = NULL;
 static const char *software = NULL;
 
-//------------------------------------------------------------------------------
-// FUNCTIONS
-//------------------------------------------------------------------------------
+/*
+ *------------------------------------------------------------------------------
+ * FUNCTIONS
+ *------------------------------------------------------------------------------
+ */
 
 int initArguments(const ArgFunction usageFunc, const ArgFunction defaultFunc)
 {
@@ -68,27 +73,26 @@ void endArguments(void)
 
 int addArgument(const char *const cmd, const char *const alias, ArgFunction function, const char *const usage)
 {
+    struct ArgCmd *newList;
+    char *param;
     if (!cmd || !function)
     {
         return EXIT_FAILURE;
     }
-    struct ArgCmd *newList = (struct ArgCmd *)realloc((void *)argList, (argNum + 1) * sizeof(struct ArgCmd));
+    newList = (struct ArgCmd *)realloc((void *)argList, (argNum + 1) * sizeof(struct ArgCmd));
     if (!newList)
     {
         return EXIT_FAILURE;
     }
     argList = newList;
-    const size_t aliasLength = alias ? strlen(alias) : 0;
-    argList[argNum] = (struct ArgCmd){
-        .cmd = cmd,
-        .cmdLength = strlen(cmd),
-        .alias = alias,
-        .aliasLength = aliasLength,
-        .parameter = FALSE,
-        .function = function,
-        .usage = usage,
-    };
-    const char *param = strchr(cmd, '=');
+    argList[argNum].cmd = cmd;
+    argList[argNum].cmdLength = strlen(cmd);
+    argList[argNum].alias = alias;
+    argList[argNum].aliasLength = alias ? strlen(alias) : 0;
+    argList[argNum].parameter = FALSE;
+    argList[argNum].function = function;
+    argList[argNum].usage = usage;
+    param = strchr(cmd, '=');
     if (param)
     {
         argList[argNum].parameter = TRUE;
@@ -108,7 +112,7 @@ int addArgument(const char *const cmd, const char *const alias, ArgFunction func
 
 static int isCommand(const char *const arg, const struct ArgCmd *const command)
 {
-    size_t length = strlen(arg);
+    const size_t length = strlen(arg);
     if (command->parameter)
     {
         if (!strncmp(arg, command->cmd, command->cmdLength))
@@ -135,15 +139,16 @@ static int isCommand(const char *const arg, const struct ArgCmd *const command)
 
 static int parseArgument(const char *const arg)
 {
+    unsigned int argCmd;
     char buf[100];
-    for (unsigned int argCmd = 0; argCmd < argNum; argCmd++)
+    for (argCmd = 0; argCmd < argNum; argCmd++)
     {
         if (isCommand(arg, &argList[argCmd]))
         {
             return argList[argCmd].function(arg);
         }
     }
-    // no argument found, try default action
+    /* no argument found, try default action */
     if (defaultFunction)
     {
         if (!defaultFunction(arg))
@@ -151,15 +156,16 @@ static int parseArgument(const char *const arg)
             return EXIT_SUCCESS;
         }
     }
-    snprintf(buf, sizeof(buf), "Unknown argument: %s", arg);
+    sprintf(buf, "Unknown argument: %s", arg);
     argumentsUsage(buf);
     return EXIT_FAILURE;
 }
 
 int parseArguments(const int argc, const char *const argv[])
 {
+    int argIdx;
     software = argv[0];
-    for (int argIdx = 1; argIdx < argc; argIdx++)
+    for (argIdx = 1; argIdx < argc; argIdx++)
     {
         if (parseArgument(argv[argIdx]))
         {
@@ -176,8 +182,11 @@ static int max(const int x, const int y)
 
 void showListOfArguments(void)
 {
-    int cmdMaxLength = 0, aliasMaxLength = 0;
-    for (unsigned int argCmd = 0; argCmd < argNum; argCmd++)
+    unsigned int argCmd;
+    int cmdMaxLength = 0;
+    int aliasMaxLength = 0;
+    int whiteSpaces;
+    for (argCmd = 0; argCmd < argNum; argCmd++)
     {
         cmdMaxLength = max(cmdMaxLength, strlen(argList[argCmd].cmd));
         if (argList[argCmd].alias)
@@ -186,7 +195,7 @@ void showListOfArguments(void)
         }
     }
     printf("[Options]:\n");
-    for (unsigned int argCmd = 0; argCmd < argNum; argCmd++)
+    for (argCmd = 0; argCmd < argNum; argCmd++)
     {
         printf("\t%-*s", cmdMaxLength, argList[argCmd].cmd);
         if (argList[argCmd].alias)
@@ -195,7 +204,7 @@ void showListOfArguments(void)
         }
         else
         {
-            int whiteSpaces = aliasMaxLength + 6;
+            whiteSpaces = aliasMaxLength + 6;
             while (--whiteSpaces)
             {
                 printf(" ");
@@ -213,7 +222,7 @@ int argumentsUsage(const char *const msg)
 {
     if (msg && strlen(msg))
     {
-        // if is not an help command, show message
+        /* if is not an help command, show message */
         if (strcmp(msg, argList[0].cmd) && strcmp(msg, argList[0].alias))
         {
             printf("%s\n", msg);
@@ -230,6 +239,8 @@ int argumentsUsage(const char *const msg)
     return EXIT_SUCCESS;
 }
 
-//------------------------------------------------------------------------------
-// END
-//------------------------------------------------------------------------------
+/*
+ *------------------------------------------------------------------------------
+ * END
+ *------------------------------------------------------------------------------
+ */

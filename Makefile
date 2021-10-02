@@ -34,8 +34,8 @@ OBJS = $(patsubst %,%.o,$(basename $(subst $(SDIR),$(ODIR),$(SRCS))))
 INCLUDES =
 
 # Flags for compiler
-CFLAGS = -W -Wall -Wextra -pedantic -std=c99 -O2
-CXXFLAGS = -W -Wall -Wextra -pedantic -O2
+CFLAGS = -W -Wall -Wextra -pedantic -std=c89
+CXXFLAGS = -W -Wall -Wextra -pedantic
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DDIR)/$*.Td
 
 # Compiler macros

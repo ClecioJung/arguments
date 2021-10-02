@@ -1,23 +1,29 @@
-//------------------------------------------------------------------------------
-// LIBRARIES
-//------------------------------------------------------------------------------
+/*
+ *------------------------------------------------------------------------------
+ * LIBRARIES
+ *------------------------------------------------------------------------------
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "arguments.h"
 
-//------------------------------------------------------------------------------
-// GLOBAL VARIABLES
-//------------------------------------------------------------------------------
+/*
+ *------------------------------------------------------------------------------
+ * GLOBAL VARIABLES
+ *------------------------------------------------------------------------------
+ */
 
 const char *const version = "1.0.0";
 int first = 0;
 int second = 0;
 
-//------------------------------------------------------------------------------
-// FUNCTIONS
-//------------------------------------------------------------------------------
+/*
+ *------------------------------------------------------------------------------
+ * FUNCTIONS
+ *------------------------------------------------------------------------------
+ */
 
 int printUsage(const char *const software)
 {
@@ -56,7 +62,7 @@ int increment(const char *const arg)
 {
     const char *ptr = strchr(arg, '=');
     int value = atoi(++ptr);
-    printf("Incrementing one to %d results in %d\n", value, value+1);
+    printf("Incrementing one to %d results in %d\n", value, value + 1);
     return EXIT_SUCCESS;
 }
 
@@ -64,7 +70,7 @@ int decrement(const char *const arg)
 {
     const char *ptr = strchr(arg, '=');
     int value = atoi(++ptr);
-    printf("Decrementing one to %d results in %d\n", value, value-1);
+    printf("Decrementing one to %d results in %d\n", value, value - 1);
     return EXIT_SUCCESS;
 }
 
@@ -89,20 +95,22 @@ int secondValue(const char *const arg)
 int sumValues(const char *const arg)
 {
     (void)arg;
-    printf("The sum of the global variables 'first' and 'second' is %d\n", first+second);
+    printf("The sum of the global variables 'first' and 'second' is %d\n", first + second);
     return EXIT_SUCCESS;
 }
 
 int subtractValues(const char *const arg)
 {
     (void)arg;
-    printf("The subtraction of the global variables 'first' and 'second' is %d\n", first-second);
+    printf("The subtraction of the global variables 'first' and 'second' is %d\n", first - second);
     return EXIT_SUCCESS;
 }
 
-//------------------------------------------------------------------------------
-// MAIN
-//------------------------------------------------------------------------------
+/*
+ *------------------------------------------------------------------------------
+ * MAIN
+ *------------------------------------------------------------------------------
+ */
 
 int main(const int argc, const char *const argv[])
 {
@@ -117,10 +125,11 @@ int main(const int argc, const char *const argv[])
     addArgument("--sum", NULL, sumValues, "Returns the sum of the global variables 'first' and 'second'.");
     addArgument("--subtract", NULL, subtractValues, "Returns the subtraction of the global variables 'first' and 'second'.");
     parseArguments(argc, argv);
-
     return EXIT_SUCCESS;
 }
 
-//------------------------------------------------------------------------------
-// END
-//------------------------------------------------------------------------------
+/*
+ *------------------------------------------------------------------------------
+ * END
+ *------------------------------------------------------------------------------
+ */
