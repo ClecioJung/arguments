@@ -54,7 +54,7 @@ static int increment(const char *const arg)
 {
     const char *ptr = strchr(arg, '=');
     int value = atoi(++ptr);
-    printf("Incrementing one to %d results in %d\n", value, ++value);
+    printf("Incrementing one to %d results in %d\n", value, value+1);
     return EXIT_SUCCESS;
 }
 
@@ -62,7 +62,7 @@ static int decrement(const char *const arg)
 {
     const char *ptr = strchr(arg, '=');
     int value = atoi(++ptr);
-    printf("Decrementing one to %d results in %d\n", value, --value);
+    printf("Decrementing one to %d results in %d\n", value, value-1);
     return EXIT_SUCCESS;
 }
 
@@ -78,7 +78,6 @@ int main(const int argc, const char *const argv[])
     addArgument("--time", "-t", displayTime, "Display the current time.");
     addArgument("--inc=%d", "-i=%d", increment, "Increment one to the value passed as argument.");
     addArgument("--dec=%d", "-d", decrement, "Decrement one to the value passed as argument.");
-    addArgument("--version", "-v", printVersion, "Display the software version.");
     parseArguments(argc, argv);
 
     return EXIT_SUCCESS;
