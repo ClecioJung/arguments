@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Arguments** is a simple C library for parsing command line arguments. Ir posseses the following characteristics:
+**Arguments** is a simple C library for parsing command line arguments. It posseses the following characteristics:
 
 - Compatible with C89;
 - Command arguments are added to the library dinamically;
