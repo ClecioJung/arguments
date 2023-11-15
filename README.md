@@ -93,13 +93,13 @@ int main(const int argc, const char *const argv[])
 }
 ```
 
-## Test
+## Example
 
-Check the file `test.c` for an complete example of usage. In order to run the test suite, just download this project and compile the example using the command `make` in its folder. Next, just run the executable `test_arguments`, using some commands, such as this examples:
+Check the file `example.c` for an complete example of usage. In order to run this example, just download this project and compile the example using the command `make example` in its folder. Next, just run the executable `example`, using the following commands:
 
 ```
-./test_arguments -h
-[Usage] ./test_arguments [Options]
+./example -h
+[Usage] ./example [Options]
 [Options]:
 	--help     or -h  : Display this help message.
 	--version  or -v  : Display the software version.
@@ -114,38 +114,38 @@ Check the file `test.c` for an complete example of usage. In order to run the te
 	--error    or -e  : Returns EXIT_FAILURE and ends the parsing of arguments.
 ```
 ```
-./test_arguments --version
+./example --version
 [Version] 1.0.0
 ```
 ```
-./test_arguments --date
+./example --date
 Current date: 2021-10-02
 ```
 ```
-./test_arguments --time
+./example --time
 Current time: 10:57:24
 ```
 ```
-./test_arguments --inc=10
+./example --inc=10
 Incrementing one to 10 results in 11
 ```
 ```
-./test_arguments --dec=10
+./example --dec=10
 Decrementing one to 10 results in 9
 ```
 ```
-./test_arguments --first=10 --second=3 --sum --subtract
+./example --first=10 --second=3 --sum --subtract
 Atributing 10 to the variable 'first'
 Atributing 3 to the variable 'second'
 The sum of the global variables 'first' and 'second' is 13
 The subtraction of the global variables 'first' and 'second' is 7
 ```
 ```
-./test_arguments --first=10 --error --second=3 --sum --subtract
+./example --first=10 --error --second=3 --sum --subtract
 Atributing 10 to the variable 'first'
 Detected an error and we're now ending the parsing of arguments.
 ```
 ```
-./test_arguments abc
+./example abc
 Unrecognized argument: abc
 ```

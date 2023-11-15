@@ -1,97 +1,36 @@
 # ----------------------------------------
-# Project definitions
+# Project options
 # ----------------------------------------
 
-EXEC = test_arguments
+NAME := arguments
 
-# Folders
-ODIR = .obj
-DDIR = .deps
-SDIR = ./
-IDIR = ./
-
-# .c files
-SRCS = $(wildcard $(SDIR)/*.c $(SDIR)/*.cpp)
-
-# .h files
-INCS = $(wildcard $(IDIR)/*.h $(IDIR)/*.hpp)
-
-# Dependency files (auto generated)
-DEPS = $(patsubst %,%.d,$(basename $(subst $(SDIR),$(DDIR),$(SRCS))))
-
-# Object files
-OBJS = $(patsubst %,%.o,$(basename $(subst $(SDIR),$(ODIR),$(SRCS))))
-
-# ----------------------------------------
-# Compiler and linker definitions
-# ----------------------------------------
-
- # Compiler and linker
-#CC = gcc
-#CXX = g++
-
-# Libraries
-INCLUDES =
+EXAMPLE := example
 
 # Flags for compiler
-CFLAGS = -W -Wall -Wextra -pedantic -std=c89
-CXXFLAGS = -W -Wall -Wextra -pedantic
-DEPFLAGS = -MT $@ -MMD -MP -MF $(DDIR)/$*.Td
-
-# Compiler macros
-COMPILE.CC = $(CC) $(CFLAGS)
-COMPILE.CXX = $(CXX) $(CXXFLAGS)
-POSTCOMPILE = mv -f $(DDIR)/$*.Td $(DDIR)/$*.d && touch $@
-
-# ----------------------------------------
-# Fomating macros
-# ----------------------------------------
-
-BOLD = \033[1m
-NORMAL = \033[0m
-RED = \033[0;31m
-GREEN = \033[0;32m
+CFLAGS := -W -Wall -Wextra -pedantic -Wconversion \
+          -Werror -flto -std=c89 -O2
 
 # ----------------------------------------
 # Compilation and linking rules
 # ----------------------------------------
 
-all: $(EXEC)
+all: $(NAME).a
 
-$(EXEC): $(OBJS)
-	@ echo "${GREEN}Building binary: ${BOLD}$@${GREEN} using dependencies: ${BOLD}$^${NORMAL}"
-	$(COMPILE.CC) $(filter %.s %.o,$^) -o $@ $(INCLUDES)
-	@ touch $@
+$(NAME).a: $(NAME).o
+	$(AR) rcs $@ $(filter %.o,$^)
 
-$(ODIR)/%.o : $(SDIR)/%.c
-$(ODIR)/%.o : $(SDIR)/%.c $(DDIR)/%.d | $(DDIR) $(ODIR)
-	@ echo "${GREEN}Building target: ${BOLD}$@${GREEN}, using dependencies: ${BOLD}$^${NORMAL}"
-	$(COMPILE.CC) $(DEPFLAGS) -c $(filter %.c %.s %.o,$^) -o $@
-	@ $(POSTCOMPILE)
+$(NAME).o: $(NAME).c $(NAME).h
+	$(CC) -c $(filter %.c %.s %.o %.a,$^) -o $@ $(CFLAGS)
 
-$(ODIR)/%.o : $(SDIR)/%.cpp
-$(ODIR)/%.o : $(SDIR)/%.cpp $(DDIR)/%.d | $(DDIR) $(ODIR)
-		@ echo "${GREEN}Building target: ${BOLD}$@${GREEN}, using dependencies: ${BOLD}$^${NORMAL}"
-		$(COMPILE.CXX) $(DEPFLAGS) -c $(filter %.cpp %.s %.o,$^) -o $@
-		@ $(POSTCOMPILE)
-
-$(DDIR)/%.d: ;
-.PRECIOUS: $(DDIR)/%.d
-
--include $(DEPS)
+$(EXAMPLE): $(EXAMPLE).c $(NAME).a $(NAME).h
+	$(CC) $(filter %.c %.s %.o %.a,$^) -o $@ $(CFLAGS)
 
 # ----------------------------------------
 # Script rules
 # ----------------------------------------
 
-$(DDIR):
-	mkdir -p $@
-
-$(ODIR):
-	mkdir -p $@
-
 clean:
-	rm -fr $(ODIR)/ $(DDIR)/ $(EXEC) $(SDIR)/*.gch *~ env.mk
+	$(RM) $(EXAMPLE) *.a *.o
 
 remade: clean all
 

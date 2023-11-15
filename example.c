@@ -65,16 +65,26 @@ int displayTime(const char *const arg)
 
 int increment(const char *const arg)
 {
-    const char *ptr = strchr(arg, '=');
-    int value = atoi(++ptr);
+    char *ptr;
+    int value;
+    if (arg == NULL) {
+        return EXIT_FAILURE;
+    }
+    ptr = strchr(arg, '=');
+    value = atoi(++ptr);
     printf("Incrementing one to %d results in %d\n", value, value + 1);
     return EXIT_SUCCESS;
 }
 
 int decrement(const char *const arg)
 {
-    const char *ptr = strchr(arg, '=');
-    int value = atoi(++ptr);
+    const char *ptr;
+    int value;
+    if (arg == NULL) {
+        return EXIT_FAILURE;
+    }
+    ptr = strchr(arg, '=');
+    value = atoi(++ptr);
     printf("Decrementing one to %d results in %d\n", value, value - 1);
     return EXIT_SUCCESS;
 }
@@ -88,8 +98,13 @@ int error(const char *const arg)
 
 int firstValue(const char *const arg)
 {
-    const char *ptr = strchr(arg, '=');
-    int value = atoi(++ptr);
+    const char *ptr;
+    int value;
+    if (arg == NULL) {
+        return EXIT_FAILURE;
+    }
+    ptr = strchr(arg, '=');
+    value = atoi(++ptr);
     first = value;
     printf("Atributing %d to the variable 'first'\n", value);
     return EXIT_SUCCESS;
@@ -97,8 +112,13 @@ int firstValue(const char *const arg)
 
 int secondValue(const char *const arg)
 {
-    const char *ptr = strchr(arg, '=');
-    int value = atoi(++ptr);
+    const char *ptr;
+    int value;
+    if (arg == NULL) {
+        return EXIT_FAILURE;
+    }
+    ptr = strchr(arg, '=');
+    value = atoi(++ptr);
     second = value;
     printf("Atributing %d to the variable 'second'\n", value);
     return EXIT_SUCCESS;

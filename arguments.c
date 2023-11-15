@@ -96,13 +96,13 @@ int addArgument(const char *const cmd, const char *const alias, ArgFunction func
     if (param)
     {
         argList[argNum].parameter = TRUE;
-        argList[argNum].cmdLength = param - cmd;
+        argList[argNum].cmdLength = (size_t)param - (size_t)cmd;
         if (alias)
         {
             param = strchr(alias, '=');
             if (param)
             {
-                argList[argNum].aliasLength = param - alias;
+                argList[argNum].aliasLength = (size_t)param - (size_t)alias;
             }
         }
     }
@@ -185,10 +185,10 @@ void showListOfArguments(void)
     int whiteSpaces;
     for (argCmd = 0; argCmd < argNum; argCmd++)
     {
-        cmdMaxLength = max(cmdMaxLength, strlen(argList[argCmd].cmd));
+        cmdMaxLength = max(cmdMaxLength, (int)strlen(argList[argCmd].cmd));
         if (argList[argCmd].alias)
         {
-            aliasMaxLength = max(aliasMaxLength, strlen(argList[argCmd].alias));
+            aliasMaxLength = max(aliasMaxLength, (int)strlen(argList[argCmd].alias));
         }
     }
     printf("[Options]:\n");
